@@ -1,10 +1,13 @@
+'''
+Creating index data from index lists provided by Edgar
+'''
+
 import os
 import csv
+import setting
 
-# Change "input_path", "output_path" accordingly
-# Store index file for crowler under "input_path"
-input_path = 'C:\\Users\\HS\\Desktop\\school\\classes\\CAPSTONE\\system\\test_app\\file\\'
-output_path = 'C:\\Users\\HS\\Desktop\\school\\classes\\CAPSTONE\\system\\test_app\\csv\\'
+input_path = setting.Setting.crawler_index_file_path
+output_path = setting.Setting.csv_path
 
 def read_all():
     files = os.listdir(input_path)

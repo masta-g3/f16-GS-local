@@ -1,3 +1,7 @@
+'''
+Converting json format data outputted from Scrapy into text or mongodb.
+'''
+
 import json
 import os
 import codecs
