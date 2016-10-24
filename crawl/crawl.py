@@ -38,7 +38,6 @@ class Crawl:
         # TODO(hs2865) once scrapy output is fixed, proceed here. delete url_list from current
 
 
-
 if __name__ == "__main__":
     crawl = Crawl()
     crawl.year_crawl_all("2015")
