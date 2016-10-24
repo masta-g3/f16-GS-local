@@ -82,8 +82,6 @@ class edgarSpiderSpider(scrapy.Spider):
         yield item
 
 '''
-for the fiscal year ended
-
 Amazon
 https://www.sec.gov/Archives/edgar/data/1018724/000101872416000172/amzn-20151231x10k.htm
 "Item&nbsp;1."
@@ -126,7 +124,6 @@ sections = ['1', '1A', '1B', '2', '3', '4', '5', '6', '7', '7A', \
 '8', '9', '9A', '9B', '10', '11', '12', '13', '14', '15']
 
 i = 0
-
 
 content[0]
 content[-1]
