@@ -9,6 +9,6 @@ import scrapy
 
 class edgarItem(scrapy.Item):
     # define the fields for your item here like:
-    number = scrapy.Field()
-    title = scrapy.Field()
+    company = scrapy.Field()
+    year = scrapy.Field()
     content = scrapy.Field()
