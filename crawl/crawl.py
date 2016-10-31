@@ -26,10 +26,6 @@ class Crawl:
             f.close()
         return list
 
-    def year_crawl_my(self, year):
-        keyword = {"year": year}
-        self.mongodb_index.copy_to_mycurrent(keyword)
-
     def year_crawl_all(self, year):
         keyword = {"year": year}
         self.mongodb_index.copy_to_current(keyword)
