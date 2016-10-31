@@ -13,7 +13,7 @@ class Crawl:
         self.mongodb_index = MongodbIndex()
 
     def execute_scrapy(self):
-        print 'scrapy is executed'
+        print('scrapy is executed')
         pass
 
     def create_url_for_scrapy_current(self):

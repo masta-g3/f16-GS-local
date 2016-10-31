@@ -11,6 +11,7 @@ class Setting:
     hostname = gethostname()
     url_filepath_for_scrapy = 'C:\\Users\\HS\\Desktop\\school\\classes\\CAPSTONE\\system\\scrapy\\url\\'
     url_filename_for_scrapy = 'url_list.txt'
+    global_parsed_text_output = ''
 
     def __init__(self):
         # Change "input_path", "output_path" accordingly
