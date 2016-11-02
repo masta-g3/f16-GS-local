@@ -7,15 +7,19 @@ import os
 import codecs
 
 class Convert:
-    def __init__(self, json_text):
+    def __init__(self, json_text, company, year, category, unique):
         # Convert json to python object
         self.data = json.loads(json_text)
         self.converted = {}
         # TODO(hs2865) Think of how to efficiently get company/year/category/unique time info
-        self.company = "Netflix"
-        self.year = "2015"
-        self.category = "10-Q"
-        self.unique = "201510061076"
+        #self.company = "Netflix"
+        #self.year = "2015"
+        #self.category = "10-Q"
+        #self.unique = "201510061076"
+        self.company = company
+        self.year = year
+        self.category = category
+        self.unique = unique
 
     def parse(self):
         for d in self.data:
@@ -87,7 +91,7 @@ class Convert:
 
 if __name__ == "__main__":
     json_text = open('netflix.json', 'r')
-    convert = Convert(json_text.read().encode('utf-8'))
+    convert = Convert(json_text.read().encode('utf-8'), "Netflix", "2015", "10-Q", "201510061076")
     convert.parse()
     convert.output("text")
     #print convert.get_mod_text()

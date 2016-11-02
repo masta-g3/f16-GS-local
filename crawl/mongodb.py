@@ -5,6 +5,7 @@ Classes for mongodb operation
 from pymongo import MongoClient
 from setting import Setting
 import json
+from bson.objectid import ObjectId
 
 class MongodbIndex:
     def __init__(self):
@@ -12,10 +13,8 @@ class MongodbIndex:
         self.db = self.client.index
         self.collection_all = self.db.all
         self.collection_current = self.db.current
-        self.collection_mycurrent = self.db["current_" + Setting.hostname.replace("-", "_")]
 
     def add(self, data):
-        # data has the data like this format ['year', 'quarter', 'company', 'form_type', 'CIK', 'data_filed', 'URL']
         label = ['year', 'quarter', 'company', 'form_type', 'cik', 'data_filed', 'url']
         post = {}
         for l in range(len(label)):
@@ -25,33 +24,21 @@ class MongodbIndex:
     def copy_to_current(self, keyword):
         # copy into current collection
         self.collection_current.remove()
-        self.collection_current.insert_many(self.collection_all.find(keyword))
+        data = self.collection_all.find()
+        if data.count() > 0:
+            self.collection_current.insert_many(data)
 
     def add_to_current(self, keyword):
         self.collection_current.insert_many(self.collection_all.find(keyword))
 
-    def copy_to_mycurrent(self, keyword):
-        # copy into current collection
-        self.collection_mycurrent.remove()
-        data = self.collection_all.find(keyword)
-        if data.count() > 0:
-            self.collection_mycurrent.insert_many(data)
-
-    def add_to_mycurrent(self, keyword):
-        data = self.collection_all.find(keyword)
-        if data.count() > 0:
-            self.collection_mycurrent.insert_many(data)
-
     def get_top_url_from_current(self, limit = 10):
-        data = self.collection_all.find()
-        list = []
+        data = self.collection_current.find()
+        ids = []
+        li = []
         for d in data.limit(limit):
-            list.append(d['url'])
-        return list
+            li.append(d['url'])
+            ids.append(str(d['_id']))
+        for i in ids:
+            self.collection_current.delete_one({"_id":ObjectId(i)})
+        return li
 
-    def get_top_url_from_mycurrent(self, limit = 10):
-        data = self.collection_all.find()
-        list = []
-        for d in data.limit(limit):
-            list.append(d['url'])
-        return list
