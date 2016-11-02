@@ -1,0 +1,46 @@
+## Apple, 2007-2015.
+start_urls = ['https://www.sec.gov/Archives/edgar/data/320193/000110465906084288/a06-25759_210k.htm',
+                'https://www.sec.gov/Archives/edgar/data/320193/000110465905058421/a05-20674_110k.htm'
+                'https://www.sec.gov/Archives/edgar/data/320193/000119312509214859/d10k.htm',
+                'https://www.sec.gov/Archives/edgar/data/320193/000119312510238044/d10k.htm',
+                'https://www.sec.gov/Archives/edgar/data/320193/000119312511282113/d220209d10k.htm',
+                'https://www.sec.gov/Archives/edgar/data/320193/000119312512444068/d411355d10k.htm',
+                'https://www.sec.gov/Archives/edgar/data/320193/000119312513416534/d590790d10k.htm',
+                'https://www.sec.gov/Archives/edgar/data/320193/000119312514383437/d783162d10k.htm',
+                'https://www.sec.gov/Archives/edgar/data/320193/000119312515356351/d17062d10k.htm'
+              ]
+
+## Morgan Stanley, 2007-2015.
+start_urls = ['https://www.sec.gov/Archives/edgar/data/895421/000119312508013719/d10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/895421/000119312509013429/d10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/895421/000119312510042763/d10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/895421/000119312511050049/d10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/895421/000119312512081807/d262950d10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/895421/000119312513077191/d484822d10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/895421/000119312514067354/d639242d10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/895421/000119312515071980/d869080d10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/895421/000119312516473553/d48186d10k.htm'
+              ]
+
+## Ford 2007-2015.
+start_urls = ['https://www.sec.gov/Archives/edgar/data/37996/000114036108005181/form10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/37996/000114036109005071/form10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/37996/000115752310001218/a6182308.htm',
+              'https://www.sec.gov/Archives/edgar/data/37996/000115752311001210/a6622311.htm',
+              'https://www.sec.gov/Archives/edgar/data/37996/000003799612000007/f12312011-10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/37996/000003799613000014/f12312012-10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/37996/000003799614000010/f1231201310k.htm',
+              'https://www.sec.gov/Archives/edgar/data/37996/000003799615000013/f1231201410-k.htm'
+                ]
+
+## Netflix 2007-2015.
+start_urls = ['https://www.sec.gov/Archives/edgar/data/1065280/000119312508040378/d10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/1065280/000119312509037430/d10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/1065280/000119312510036181/d10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/1065280/000119312511040217/d10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/1065280/000119312512053009/d260328d10k.htm',
+              'https://www.sec.gov/Archives/edgar/data/1065280/000106528013000008/nflx1231201210kdoc.htm',
+              'https://www.sec.gov/Archives/edgar/data/1065280/000106528014000006/nflx10k2013.htm',
+              'https://www.sec.gov/Archives/edgar/data/1065280/000106528015000006/nflx201410k.htm',
+              'https://www.sec.gov/Archives/edgar/data/1065280/000106528016000047/nflx201510k.htm'
+              ]
