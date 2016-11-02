@@ -48,7 +48,8 @@ class Convert:
         # (ex) Netflix/2015/10-Q/201510061076
         basename = self.company + os.sep + self.year + os.sep +\
                    self.category + os.sep + self.unique + os.sep
-        self.create_directory(basename)
+        nas_dest = setting.nas_dest
+        self.create_directory(nas_dest + basename)
 
         for number in self.converted:
             dirname = basename + number + os.sep
@@ -88,11 +89,11 @@ class Convert:
     def test(self):
         print(len(self.data))
 
-
+'''
 if __name__ == "__main__":
     json_text = open('netflix.json', 'r')
     convert = Convert(json_text.read().encode('utf-8'), "Netflix", "2015", "10-Q", "201510061076")
     convert.parse()
     convert.output("text")
     #print convert.get_mod_text()
-
+'''

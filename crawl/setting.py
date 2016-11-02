@@ -11,7 +11,8 @@ class Setting:
     hostname = gethostname()
     url_filepath_for_scrapy = '/home/gs/files/scrapy/'
     url_filename_for_scrapy = 'url_list.txt'
-    global_parsed_text_output = ''
+    scrapy_parsed_text_output = '/home/gs/files/json/output.json'
+    nas_output = '/mnt/output/'
 
     def __init__(self):
         # Change "input_path", "output_path" accordingly

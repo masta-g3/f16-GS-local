@@ -36,7 +36,7 @@ class MongodbIndex:
         ids = []
         li = []
         for d in data.limit(limit):
-            li.append(d['url'])
+            li.append([d['url'], d['company'], d['year'], d['form_type'], d['data_filed'].replace("-", "_")])
             ids.append(str(d['_id']))
         for i in ids:
             self.collection_current.delete_one({"_id":ObjectId(i)})
