@@ -9,6 +9,7 @@ import setting
 from mongodb import MongodbIndex
 import codecs
 from convert_json_to_text import Convert
+import sys
 
 class Crawl:
     def __init__(self):
@@ -47,7 +48,10 @@ class Crawl:
 
 if __name__ == "__main__":
     crawl = Crawl()
-    crawl.crawl_prepare()
+    args = sys.argv
+    if len(args) >= 2:
+        if args[1] == 'start':
+            crawl.crawl_prepare()
     mongodb = MongodbIndex()
     list_data = ['1']
     while len(list_data) != 0:
