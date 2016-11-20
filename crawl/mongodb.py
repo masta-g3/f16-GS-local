@@ -34,7 +34,7 @@ class MongodbIndex:
     def add_to_current(self, keyword):
         self.collection_current.insert_many(self.collection_all.find(keyword))
 
-    def get_top_url_from_current(self, limit = 1):
+    def get_top_url_from_current(self, limit = 10):
         data = self.collection_current.find()
         ids = []
         li = []

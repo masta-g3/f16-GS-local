@@ -49,23 +49,28 @@ if __name__ == "__main__":
     crawl = Crawl()
     crawl.crawl_prepare()
     mongodb = MongodbIndex()
-    list_data = crawl.create_url_for_scrapy_current()
-    if len(list_data) != 0:
-        success = crawl.execute_scrapy()
-    else:
-        pass
-    if success == 0:
-        # convert json to text to NAS
-        json_text = open('content.json', 'r')
-        json_data = json.loads(json_text.read())
-        json_keys = json_data.keys()
-        for ind in range(len(list_data)):
-            data = list_data[ind]
-            # ([d['url'], d['company'], d['year'], d['form_type'], d['data_filed'].replace("-", "_")])
-            convert = Convert(json_data[json_keys[ind]], data[1], data[2], data[3], data[4], data[5])
-            convert.parse()
-            convert.output("text")
-        logs = open('logs.csv', 'r').read()
-        errors = open('errors.csv', 'r').read()
-        crawl.log_output(errors, logs)
+    list_data = ['1']
+    while len(list_data) != 0:
+        list_data = crawl.create_url_for_scrapy_current()
+        if len(list_data) != 0:
+            success = crawl.execute_scrapy()
+        else:
+            break
+        if success == 0:
+            # convert json to text to NAS
+            json_text = open('content.json', 'r')
+            json_data = json.loads(json_text.read())
+            json_keys = json_data.keys()
+            for ind in range(len(list_data)):
+                data = list_data[ind]
+                # ([d['url'], d['company'], d['year'], d['form_type'], d['data_filed'].replace("-", "_")])
+                try:
+                    convert = Convert(json_data[json_keys[ind]], data[1], data[2], data[3], data[4], data[5])
+                    convert.parse()
+                    convert.output("text")
+                except:
+                    continue
+            logs = open('logs.csv', 'r').read()
+            errors = open('errors.csv', 'r').read()
+            crawl.log_output(errors, logs)
 
