@@ -5,30 +5,27 @@ Converting json format data outputted from Scrapy into text or mongodb.
 import json
 import os
 import codecs
+import setting
+import sys
 
 class Convert:
-    def __init__(self, json_text, company, year, category, unique):
+    def __init__(self, json_data, company, year, category, unique, cik):
         # Convert json to python object
-        self.data = json.loads(json_text)
+        self.data = json_data
         self.converted = {}
-        # TODO(hs2865) Think of how to efficiently get company/year/category/unique time info
-        #self.company = "Netflix"
-        #self.year = "2015"
-        #self.category = "10-Q"
-        #self.unique = "201510061076"
-        self.company = company
-        self.year = year
-        self.category = category
-        self.unique = unique
+        self.company = str(company)
+        self.year = str(year)
+        self.category = str(category)
+        self.unique = str(unique)
+        self.cik = str(cik)
 
     def parse(self):
-        for d in self.data:
-            if d["number"] not in self.converted:
-                self.converted[d["number"]] = {}
-                self.converted[d["number"]]["title"] = d["title"]
-                self.converted[d["number"]]["content"] = []
-            # TODO(hs2865) This part needs to be changed depending on json format
-            self.converted[d["number"]]["content"].append(d["content"])
+        for section in self.data:
+            if section not in self.converted:
+                self.converted[section] = []
+            list_data = self.data[section]
+            for l in list_data:
+                self.converted[section].append(l)
 
     def output(self, mod):
         # At mode, we can designate "text" or "mongodb"
@@ -44,41 +41,37 @@ class Convert:
         elif mod == 'mongodb':
             pass
 
+
     def output_text(self):
         # (ex) Netflix/2015/10-Q/201510061076
-        basename = self.company + os.sep + self.year + os.sep +\
+        basename = self.cik + os.sep + self.company + os.sep + self.year + os.sep +\
                    self.category + os.sep + self.unique + os.sep
-        nas_dest = setting.nas_dest
-        self.create_directory(nas_dest + basename)
-
-        for number in self.converted:
-            dirname = basename + number + os.sep
+        nas_dest = setting.Setting.nas_output
+        basename = nas_dest + basename
+        self.create_directory(basename)
+        with codecs.open(basename + "output.json", "w", 'utf-8') as f:
+            json.dump(self.data, f)
+        f.close()
+        
+        for section in self.converted:
+            dirname = basename + section + os.sep
             self.create_directory(dirname)
 
-            # Write title
-            tmp_file_name = "title.txt"
-
-            with codecs.open(dirname + tmp_file_name, "w", 'utf-8') as f:
-                f.write(self.converted[number]["title"])
-            f.close()
-
             # Write content
-            for ind_content in range(len(self.converted[number]["content"])):
-                content = self.converted[number]["content"][ind_content]
-                for key_content in content:
-                    tmp_file_name = key_content + ".txt"
-                    tmp_content = content[key_content]
+            for ind in range(len(self.converted[section])):
+                content = self.converted[section][ind]
 
-                with codecs.open(dirname + tmp_file_name, "w", 'utf-8') as f:
-                    f.write(tmp_content)
+                with codecs.open(dirname + str(ind) + '.txt', "w", 'utf-8') as f:
+                    f.write(content)
                 f.close()
+
 
     def create_directory(self, path):
         if not os.path.exists(os.path.dirname(path)):
             try:
                 os.makedirs(os.path.dirname(path))
-            except OSError as exc:  # Guard against race condition
-                print(exc.message)
+            except:
+                print(sys.exc_info()[0])
 
     def get_raw_text(self):
         return self.data

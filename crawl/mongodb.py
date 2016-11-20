@@ -14,6 +14,9 @@ class MongodbIndex:
         self.collection_all = self.db.all
         self.collection_current = self.db.current
 
+    def remove_all(self):
+        self.collection_all.remove()
+
     def add(self, data):
         label = ['year', 'quarter', 'company', 'form_type', 'cik', 'data_filed', 'url']
         post = {}
@@ -31,12 +34,12 @@ class MongodbIndex:
     def add_to_current(self, keyword):
         self.collection_current.insert_many(self.collection_all.find(keyword))
 
-    def get_top_url_from_current(self, limit = 10):
+    def get_top_url_from_current(self, limit = 1):
         data = self.collection_current.find()
         ids = []
         li = []
         for d in data.limit(limit):
-            li.append([d['url'], d['company'], d['year'], d['form_type'], d['data_filed'].replace("-", "_")])
+            li.append([d['url'], d['company'], d['year'], d['form_type'], d['data_filed'].replace("-", "_"), d['cik']])
             ids.append(str(d['_id']))
         for i in ids:
             self.collection_current.delete_one({"_id":ObjectId(i)})

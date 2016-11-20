@@ -3,6 +3,7 @@ Inserting index information into mongodb
 This mongo data source will be the base data for all crawling operation
 '''
 
+import json
 import os
 import setting
 from mongodb import MongodbIndex
@@ -35,6 +36,14 @@ class Crawl:
         #self.execute_scrapy()
         # TODO(hs2865) once scrapy output is fixed, proceed here. delete url_list from current
 
+    def log_output(self, error, log):
+        with codecs.open(setting.Setting.nas_output + 'errors.csv', "a", 'utf-8') as f:
+            f.write(error)
+        f.close()
+        with codecs.open(setting.Setting.nas_output + 'logs.csv', "a", 'utf-8') as f:
+            f.write(log)
+        f.close()
+
 
 if __name__ == "__main__":
     crawl = Crawl()
@@ -47,10 +56,16 @@ if __name__ == "__main__":
         pass
     if success == 0:
         # convert json to text to NAS
-        for data in list_data:
-            json_text = open(setting.scrapy_parsed_text_output, 'r')
+        json_text = open('content.json', 'r')
+        json_data = json.loads(json_text.read())
+        json_keys = json_data.keys()
+        for ind in range(len(list_data)):
+            data = list_data[ind]
             # ([d['url'], d['company'], d['year'], d['form_type'], d['data_filed'].replace("-", "_")])
-            convert = Convert(json_text, data[1], data[2], data[3], data[4])
+            convert = Convert(json_data[json_keys[ind]], data[1], data[2], data[3], data[4], data[5])
             convert.parse()
             convert.output("text")
+        logs = open('logs.csv', 'r').read()
+        errors = open('errors.csv', 'r').read()
+        crawl.log_output(errors, logs)
 
