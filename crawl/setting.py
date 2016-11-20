@@ -13,6 +13,7 @@ class Setting:
     url_filename_for_scrapy = 'url_list.txt'
     scrapy_parsed_text_output = '/home/gs/files/json/output.json'
     nas_output = '/mnt/output/'
+    edgar_base_url = 'https://www.sec.gov'
 
     def __init__(self):
         # Change "input_path", "output_path" accordingly

@@ -21,7 +21,7 @@ class MongodbIndex:
             post[label[l]] = data[l]
         self.collection_all.insert_one(post)
 
-    def copy_to_current(self, keyword):
+    def copy_to_current(self):
         # copy into current collection
         self.collection_current.remove()
         data = self.collection_all.find()

@@ -15,7 +15,7 @@ class Crawl:
 
     def execute_scrapy(self):
         print('scrapy is executed')
-        success = os.system('sh scrapy_execute.sh')
+        success = os.system('python ../new_scraper.py ' + setting.Setting.url_filepath_for_scrapy + setting.Setting.url_filename_for_scrapy)
         return success
 
     def create_url_for_scrapy_current(self):
@@ -39,12 +39,13 @@ class Crawl:
 if __name__ == "__main__":
     crawl = Crawl()
     crawl.crawl_prepare()
-    list_data = self.create_url_for_scrapy_current()
+    mongodb = MongodbIndex()
+    list_data = crawl.create_url_for_scrapy_current()
     if len(list_data) != 0:
-        success = self.execute_scrapy()
+        success = crawl.execute_scrapy()
     else:
         pass
-    if success == 0;
+    if success == 0:
         # convert json to text to NAS
         for data in list_data:
             json_text = open(setting.scrapy_parsed_text_output, 'r')
@@ -53,24 +54,3 @@ if __name__ == "__main__":
             convert.parse()
             convert.output("text")
 
-
-'''
-    while True:
-        url_list = self.create_url_for_scrapy_current()
-        if len(list_url) != 0:
-            success = self.execute_scrapy()
-        else:
-            break
-        if success == 0;
-            # convert json to text to NAS 
-    # Convert json file to text files
-'''
-
-    '''
-    # example of designating individual cik
-    keyword = {"cik": "1444144"}
-    crawl = Crawl()
-    crawl.crawl_begin_mycurrent(keyword)
-    keyword = {"cik": "910638"}
-    crawl.crawl_add_mycurrent(keyword)
-    '''
