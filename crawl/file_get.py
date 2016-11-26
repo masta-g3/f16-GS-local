@@ -73,7 +73,10 @@ class FileGet:
                 t = p[-2]
                 year = p[-3]
                 self.data[self.cik][year][t][unique] = {}
-            tmp_path = glob.glob(cur + os.sep + "*")
+            if d != 5:
+                tmp_path = glob.glob(cur + os.sep + "*")
+            else:
+                tmp_path = glob.glob(cur + os.sep + "output.json")
             for p in tmp_path:
                 queue.append(p)
                 depth.append(d + 1)  
@@ -125,9 +128,9 @@ def debug(tmp):
                     print k1 + " " + k2 + " " + k3 + " " + k4
 
 if __name__ == "__main__":
-    #debug(search_by_cik(1129260))    
+    debug(search_by_cik(1129260))    
     #print search_by_cik(1129260)
-    print search_by_cik(11)
+    #print search_by_cik(11)
 
     '''
     parser = optparse.OptionParser()
