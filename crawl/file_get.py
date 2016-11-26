@@ -114,7 +114,14 @@ class FileGet:
 
 
 def search_by_cik(cik):
-    fileget = FileGet(str(cik), "", "")
+    cik_str = str(cik)
+    ind = 0
+    while cik_str[ind] == '0':
+        ind = ind + 1
+    if ind >= len(cik_str):
+        return ""
+    cik_str = cik_str[ind : ]
+    fileget = FileGet(cik_str, "", "")
     fileget.bfs(fileget.get_path())
     return fileget.get_data()
 
@@ -128,7 +135,7 @@ def debug(tmp):
                     print k1 + " " + k2 + " " + k3 + " " + k4
 
 if __name__ == "__main__":
-    debug(search_by_cik(1129260))    
+    debug(search_by_cik("00015357"))    
     #print search_by_cik(1129260)
     #print search_by_cik(11)
 
