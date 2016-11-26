@@ -5,6 +5,7 @@ import argparse
 import re
 import cgi
 import file_get  
+import json
 
 class HTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -14,7 +15,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
-            self.wfile.write(data)
+            self.wfile.write(json.dumps(data))
         else:
             self.send_response(403)
             self.send_header('Content-Type', 'application/json')
