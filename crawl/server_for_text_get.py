@@ -16,6 +16,13 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps(data))
+        elif None != re.search('/api/v1/getmissingtext/*', self.path):
+            textID = self.path.split('/')[-1]
+            data = file_get.get_missing_by_cik(textID)
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(data))
         else:
             self.send_response(403)
             self.send_header('Content-Type', 'application/json')
