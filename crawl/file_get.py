@@ -19,7 +19,8 @@ class FileGet:
         self.type = category
 	self.path = "/mnt/output/" + cik
         self.data = {self.cik : {}}
-        '''
+
+    def check_missing(self):
         year_list = ["2011", "2012", "2013", "2014", "2015"]
         type_list = ["10-K", "10-Q"]
         for year in year_list:
@@ -27,7 +28,6 @@ class FileGet:
             for t in type_list:
                  self.data[self.cik][year][t] = {}
         self.unique = ""
-        '''
 
     def create_json_dir(self, json_data):
         if self.year in self.data[self.cik]:
