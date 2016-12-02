@@ -39,7 +39,7 @@ class FileGet:
 
     def check_missing(self):
         self.check_company()
-        year_list = ["2011", "2012", "2013", "2014", "2015"]
+        year_list = ["2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015"]
         type_list = ["10-K"] # Add 10-Q if we would like to parse
         for year in year_list:
             tmp_path = glob.glob(self.path + os.sep + "*" + os.sep + year)
@@ -259,8 +259,8 @@ def debug(tmp):
 
 
 if __name__ == "__main__":
-    get_missing_by_cik("1100412")
-    #debug(search_by_cik("1100412"))    
+    #get_missing_by_cik("1018724")
+    debug(search_by_cik("1018724"))    
     #print search_by_cik(1129260)
     #print search_by_cik(11)
 
