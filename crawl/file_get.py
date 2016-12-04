@@ -259,8 +259,8 @@ def debug(tmp):
 
 
 if __name__ == "__main__":
-    #get_missing_by_cik("1018724")
-    debug(search_by_cik("1018724"))    
+    #get_missing_by_cik("1065280")
+    debug(search_by_cik("1065280"))    
     #print search_by_cik(1129260)
     #print search_by_cik(11)
 
