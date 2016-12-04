@@ -8,7 +8,7 @@ library(broom)
 library(zoo)   
 
 
-setwd('C:\\Users\\HS\\Downloads\\capstone_app')
+setwd('/home/hs2865/src/f16-GS/capstone_app')
 data <- read.csv("results.csv")
 colnames(data) <- c('CIK', 'Jaccard', 'TF-IDF', 'Deleted Words','New Words', 'Top Words', 'Year')
 data[,c(2,3,4,5)] = round(data[,c(2,3,4,5)],2)
