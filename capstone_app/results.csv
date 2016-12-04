@@ -1,0 +1,15 @@
+CIK,Change Jaccard,Change TFID,Deleted Words,New Words,Top words,Year
+37996,0.219298245614,0.0480026184831,0.33,0.67,"['result', 'credit', 'financi', 'ford', 'oper', 'condit', 'market', 'substanti', 'vehicl', 'advers']",2008
+37996,0.280760626398,0.0539934482359,0.808764940239,0.191235059761,"['result', 'oper', 'financi', 'vehicl', 'credit', 'ford', 'condit', 'advers', 'substanti', 'cost']",2009
+37996,0.151069518717,0.0375804619642,0.495575221239,0.504424778761,"['vehicl', 'result', 'credit', 'oper', 'ford', 'financi', 'substanti', 'cost', 'market', 'condit']",2010
+37996,0.422314911366,0.119205244471,0.340740740741,0.659259259259,"['financi', 'credit', 'ford', 'vehicl', 'result', 'market', 'advers', 'substanti', 'oper', 'unit']",2011
+37996,0.105084745763,0.0159062159986,0.311827956989,0.688172043011,"['financi', 'credit', 'ford', 'vehicl', 'market', 'result', 'advers', 'oper', 'addit', 'substanti']",2012
+37996,0.271794871795,0.0535622372701,0.550943396226,0.449056603774,"['credit', 'ford', 'market', 'financi', 'vehicl', 'advers', 'result', 'substanti', 'increas', 'cost']",2013
+37996,0.19693654267,0.0373657093592,0.527777777778,0.472222222222,"['credit', 'financi', 'ford', 'market', 'vehicl', 'result', 'advers', 'substanti', 'oper', 'increas']",2014
+37996,0.645134228188,0.469426332121,0.514954486346,0.485045513654,"['merchandis', 'store', 'oper', 'busi', 'affect', 'result', 'advers', 'condit', 'athlet', 'financi']",2015
+1065280,0.0775347912525,0.00949392267819,0.692307692308,0.307692307692,"['subscrib', 'servic', 'advers', 'affect', 'dvd', 'busi', 'content', 'oper', 'increas', 'result']",2008
+1065280,0.158333333333,0.034612247226,0.251461988304,0.748538011696,"['subscrib', 'dvd', 'servic', 'advers', 'affect', 'busi', 'oper', 'content', 'increas', 'result']",2009
+1065280,0.116788321168,0.019416024042,0.5390625,0.4609375,"['subscrib', 'dvd', 'servic', 'advers', 'affect', 'busi', 'oper', 'increas', 'result', 'new']",2010
+1065280,0.342487883683,0.101407804133,0.502358490566,0.497641509434,"['subscrib', 'busi', 'content', 'advers', 'servic', 'oper', 'affect', 'dvd', 'result', 'impact']",2011
+1065280,0.318700614574,0.220866130222,0.685950413223,0.314049586777,"['member', 'busi', 'oper', 'servic', 'advers', 'content', 'affect', 'result', 'market', 'impact']",2014
+1065280,0.679539852095,0.686075073224,0.604594921403,0.395405078597,"['patent', 'remot', 'cisco', 'portfolio', 'licens', 'revenu', 'power', 'royalti', 'license', 'litig']",2015
