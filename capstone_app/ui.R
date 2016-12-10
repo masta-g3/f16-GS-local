@@ -1,7 +1,8 @@
 library(shinydashboard)
 library(shiny)
-library(ggvis)
-library(ggplot2)
+#library(rCharts)
+#library(rNVD3)
+library(highcharter)
 library(DT)
 options(shiny.maxRequestSize=100*1024^2) 
 
@@ -32,8 +33,9 @@ dashboardPage(
                 fluidRow(
                   column(6,
                          #h2(strong("Lexical Changes")),
-                         h2("Lexical Changes"),
-                         showOutput("plot1", "nvd3"),
+                         h2("Measures of Change"),
+                         #showOutput("plot1","nvd3"),
+                         highchartOutput("plot1",height = "400px"),
                          #plotOutput("plot1"),
                          h4('The graph above shows the Jaccard distance and the cosine distance computed
                             using the TF-IDF features of each document. We are basically trying to
@@ -42,8 +44,9 @@ dashboardPage(
                   ),
                   column(6,
                          #h2(strong("New vs Deleted Words")),
-                         h2("New vs Deleted Words"),
-                         showOutput("plot2", "nvd3"),
+                         h2("Changes in Document Structure"),
+                         #showOutput("plot2","nvd3"),
+                         highchartOutput("plot2",height = "400px"),
                          #ggvisOutput("word_dist"),
                          h4('The graph above shows the change between documents by decomposing the change in the share
                             of deleted words and new words.')
