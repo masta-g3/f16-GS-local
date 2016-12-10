@@ -1,6 +1,4 @@
 library(shinydashboard)
-library(shinyFiles)
-library(leaflet)
 library(shiny)
 library(ggvis)
 library(ggplot2)
@@ -35,7 +33,8 @@ dashboardPage(
                   column(6,
                          #h2(strong("Lexical Changes")),
                          h2("Lexical Changes"),
-                         plotOutput("plot1"),
+                         showOutput("plot1", "nvd3"),
+                         #plotOutput("plot1"),
                          h4('The graph above shows the Jaccard distance and the cosine distance computed
                             using the TF-IDF features of each document. We are basically trying to
                             capture the lexical changes between documents.')
@@ -44,7 +43,8 @@ dashboardPage(
                   column(6,
                          #h2(strong("New vs Deleted Words")),
                          h2("New vs Deleted Words"),
-                         plotOutput("plot2"),
+                         showOutput("plot2", "nvd3"),
+                         #ggvisOutput("word_dist"),
                          h4('The graph above shows the change between documents by decomposing the change in the share
                             of deleted words and new words.')
                   )
