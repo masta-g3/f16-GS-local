@@ -1,6 +1,6 @@
 ## Apple, 2007-2015.
 start_urls = ['https://www.sec.gov/Archives/edgar/data/320193/000110465906084288/a06-25759_210k.htm',
-                'https://www.sec.gov/Archives/edgar/data/320193/000110465905058421/a05-20674_110k.htm'
+                'https://www.sec.gov/Archives/edgar/data/320193/000110465905058421/a05-20674_110k.htm',
                 'https://www.sec.gov/Archives/edgar/data/320193/000119312509214859/d10k.htm',
                 'https://www.sec.gov/Archives/edgar/data/320193/000119312510238044/d10k.htm',
                 'https://www.sec.gov/Archives/edgar/data/320193/000119312511282113/d220209d10k.htm',
@@ -44,3 +44,39 @@ start_urls = ['https://www.sec.gov/Archives/edgar/data/1065280/00011931250804037
               'https://www.sec.gov/Archives/edgar/data/1065280/000106528015000006/nflx201410k.htm',
               'https://www.sec.gov/Archives/edgar/data/1065280/000106528016000047/nflx201510k.htm'
               ]
+
+## Pfizer 2007-2015.
+htmls = ['https://www.sec.gov/Archives/edgar/data/78003/000093041307001807/c46660_10k.htm',
+         'https://www.sec.gov/Archives/edgar/data/78003/000093041308001360/c52104_10-k.htm',
+         'https://www.sec.gov/Archives/edgar/data/78003/000119312509040568/d10k.htm',
+         'https://www.sec.gov/Archives/edgar/data/78003/000119312510042425/d10k.htm',
+         'https://www.sec.gov/Archives/edgar/data/78003/000119312511048877/d10k.htm',
+         'https://www.sec.gov/Archives/edgar/data/78003/000119312512085703/d278590d10k.htm',
+         'https://www.sec.gov/Archives/edgar/data/78003/000007800313000006/pfe-12312012x10k.htm',
+         'https://www.sec.gov/Archives/edgar/data/78003/000007800314000018/pfe-12312013x10k.htm',
+         'https://www.sec.gov/Archives/edgar/data/78003/000007800315000014/pfe-12312014x10kshell.htm',
+         'https://www.sec.gov/Archives/edgar/data/78003/000007800316000077/pfe-12312015x10kshell.htm'
+        ]
+
+## GE 2007-2015.
+htmls = ['https://www.sec.gov/Archives/edgar/data/40545/000004054516000145/ge10k2015.htm',
+        'https://www.sec.gov/Archives/edgar/data/40545/000004054515000030/ge10k2014.htm',
+        'https://www.sec.gov/Archives/edgar/data/40545/000004055414000023/geform10k2013.htm',
+        'https://www.sec.gov/Archives/edgar/data/40545/000004054512000016/ge10k.htm',
+        'https://www.sec.gov/Archives/edgar/data/40545/000119312511047479/d10k.htm',
+        'https://www.sec.gov/Archives/edgar/data/40545/000004054510000010/frm10k.htm',
+        'https://www.sec.gov/Archives/edgar/data/40545/000004054508000011/frm10k.htm',
+        'https://www.sec.gov/Archives/edgar/data/40545/000004054507000017/frm10k.htm',
+]
+
+htmls = ['https://www.sec.gov/Archives/edgar/data/34088/000119312507042435/d10k.htm',
+        'https://www.sec.gov/Archives/edgar/data/34088/000119312508041781/d10k.htm',
+        'https://www.sec.gov/Archives/edgar/data/34088/000119312509040966/d10k.htm',
+        'https://www.sec.gov/Archives/edgar/data/34088/000119312510042929/d10k.htm',
+        'https://www.sec.gov/Archives/edgar/data/34088/000119312511047394/d10k.htm',
+        'https://www.sec.gov/Archives/edgar/data/34088/000119312512078102/d257530d10k.htm',
+        'https://www.sec.gov/Archives/edgar/data/34088/000003408813000011/xom10k2012.htm',
+        'https://www.sec.gov/Archives/edgar/data/34088/000003408814000012/xom10k2013.htm',
+        'https://www.sec.gov/Archives/edgar/data/34088/000003408815000013/xom10k2014.htm',
+        'https://www.sec.gov/Archives/edgar/data/34088/000003408816000065/xom10k2015.htm'
+]

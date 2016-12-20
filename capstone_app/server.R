@@ -2,33 +2,46 @@ library(shiny)
 library(dplyr)
 library(tidyr)
 library(highcharter)
-#library(rCharts)
-#library(rNVD3)
-library(reshape)
-library(stringr)
-library(broom)
 
 #setwd('/home/hs2865/src/f16-GS/capstone_app')
-setwd('/Users/manuelrueda/Dropbox/Documents/python/f16-GS/capstone_app')
+#setwd('/Users/manuelrueda/Dropbox/Documents/python/f16-GS/capstone_app')
 
 ## Read data.
-companies <- read.csv('cik_new.csv', header=FALSE, sep='|', stringsAsFactors = FALSE)
+#companies <- read.csv('cik_new.csv', header=FALSE, sep='|', stringsAsFactors = FALSE)
+companies <- read.csv('cik_sample.csv', stringsAsFactors = FALSE)
 colnames(companies) <- c('Company.Name', 'CIK') 
+companies$CIK <- sprintf('%010d', companies$CIK)
 companies <- companies[!duplicated(companies[,'CIK']),]
-data <- read.csv("results-best.csv")
+risk_data <- read.csv("risk_data.csv")
+business_data <- read.csv("business_data.csv")
 
-## Clean and format.
-data <- unique(data)
-colnames(data) <- c('CIK', 'Jaccard', 'TF-IDF', 'Word2Vec', 'Common Words', 'Deleted Words','New Words', 'Total Words', 'Top Words', 'Year')
-data[,c(2:7)] = round(data[,c(2:7)],2)
-data$CIK <- sprintf('%010d', data$CIK)
+## Clean and format risk.
+risk_data <- unique(risk_data)
+colnames(risk_data) <- c('CIK', 'Jaccard', 'TF-IDF', 'Word2Vec', 'Common Words', 'Deleted Words','New Words', 'Total Words', 'Top Words', 'Year')
+risk_data[,c(2:7)] = round(risk_data[,c(2:7)],2)
+risk_data$CIK <- sprintf('%010d', risk_data$CIK)
 
-data <- merge(x = data, y = companies[,c('CIK', 'Company.Name')], by = "CIK", all.x = TRUE)
+risk_data <- merge(x = risk_data, y = companies[,c('CIK', 'Company.Name')], by = "CIK", all.x = TRUE)
+
+## Clean and format business.
+business_data <- unique(business_data)
+colnames(business_data) <- c('CIK', 'Jaccard', 'TF-IDF', 'Word2Vec', 'Common Words', 'Deleted Words','New Words', 'Total Words', 'Top Words', 'Year')
+business_data[,c(2:7)] = round(business_data[,c(2:7)],2)
+business_data$CIK <- sprintf('%010d', business_data$CIK)
+
+business_data <- merge(x = business_data, y = companies[,c('CIK', 'Company.Name')], by = "CIK", all.x = TRUE)
+
+## Remove 2007.
+risk_data <- risk_data[risk_data$Year != 2007,]
+business_data <- business_data[business_data$Year != 2007,]
 
 ## Normalize word2vec.
-data$Word2Vec <- round(data$Word2Vec / max(data$Word2Vec),2)
+risk_data$Word2Vec <- round(risk_data$Word2Vec / max(risk_data$Word2Vec),2)
+business_data$Word2Vec <- round(business_data$Word2Vec / max(business_data$Word2Vec),2)
+
 ## Get means.
-means <- round(colMeans(data[,c('Jaccard','TF-IDF','Word2Vec')]),2)
+means <- round(colMeans(risk_data[,c('Jaccard','TF-IDF','Word2Vec')]),2)
+means <- round(colMeans(business_data[,c('Jaccard','TF-IDF','Word2Vec')]),2)
 ## Get IDs.
 #mapping <- seq(length(unique(data$Company.Name)))
 #names(mapping) <- unique(data$Company.Name)
@@ -36,44 +49,70 @@ means <- round(colMeans(data[,c('Jaccard','TF-IDF','Word2Vec')]),2)
 
 ## Filled heatmap dataset.
 all_years = c(2008,2009,2010,2011,2012,2013,2014,2015)
-all_companies <- unique(data$CIK)
-#filled_data <- data[, c('Year', 'Id', 'CIK', 'Company.Name', 'Jaccard', 'TF-IDF', 'Word2Vec')]
-filled_data <- data[, c('Year', 'CIK', 'Company.Name', 'Jaccard', 'TF-IDF', 'Word2Vec')]
+all_companies <- unique(risk_data$CIK)
 
+filled_risk <- risk_data[, c('Year', 'CIK', 'Company.Name', 'Jaccard', 'TF-IDF', 'Word2Vec')]
+filled_business <- business_data[, c('Year', 'CIK', 'Company.Name', 'Jaccard', 'TF-IDF', 'Word2Vec')]
+
+## Filled Risk.
 for(company in all_companies) {
-  tmp_data <- data[data$CIK == company, c('Year', 'CIK', 'Company.Name', 'Jaccard', 'TF-IDF', 'Word2Vec')]
+  tmp_data <- risk_data[risk_data$CIK == company, c('Year', 'CIK', 'Company.Name', 'Jaccard', 'TF-IDF', 'Word2Vec')]
   missing_years = setdiff(all_years, unique(tmp_data$Year))
   name <- unique(tmp_data$Company.Name)
   cik <- unique(tmp_data$CIK)
   for(year in missing_years) {
     new_row = c(year, cik, name, means[1], means[2], means[3])
-    filled_data = rbind(filled_data, new_row)
+    filled_risk = rbind(filled_risk, new_row)
   }
 }
-filled_data <- arrange(filled_data, CIK, Year)
+filled_risk <- arrange(filled_risk, CIK, Year)
 update.cols <- c('Year','Jaccard', 'TF-IDF', 'Word2Vec')
-filled_data[update.cols] <- sapply(filled_data[update.cols],as.numeric)
+filled_risk[update.cols] <- sapply(filled_risk[update.cols],as.numeric)
 
+## Filled Business.
+for(company in all_companies) {
+  tmp_data <- business_data[business_data$CIK == company, c('Year', 'CIK', 'Company.Name', 'Jaccard', 'TF-IDF', 'Word2Vec')]
+  missing_years = setdiff(all_years, unique(tmp_data$Year))
+  name <- unique(tmp_data$Company.Name)
+  cik <- unique(tmp_data$CIK)
+  for(year in missing_years) {
+    new_row = c(year, cik, name, means[1], means[2], means[3])
+    filled_business = rbind(filled_business, new_row)
+  }
+}
+filled_business <- arrange(filled_business, CIK, Year)
+update.cols <- c('Year','Jaccard', 'TF-IDF', 'Word2Vec')
+filled_business[update.cols] <- sapply(filled_business[update.cols],as.numeric)
 
 ## Get IDs.
-mapping <- seq(length(unique(filled_data$Company.Name)))
-names(mapping) <- unique(filled_data$Company.Name)
-filled_data$Id <- mapping[filled_data$Company.Name]
-data$Id <- mapping[data$Company.Name]
+mapping_risk <- seq(length(unique(filled_risk$Company.Name)))
+names(mapping_risk) <- unique(filled_risk$Company.Name)
 
+filled_risk$Id <- mapping_risk[filled_risk$Company.Name]
+risk_data$Id <- mapping_risk[risk_data$Company.Name]
+
+mapping_business <- seq(length(unique(filled_business$Company.Name)))
+names(mapping_business) <- unique(filled_business$Company.Name)
+
+filled_business$Id <- mapping_business[filled_business$Company.Name]
+business_data$Id <- mapping_business[business_data$Company.Name]
 
 ## Get list of all companies and CIKs.
-cik_map <- unique(data[c('CIK','Company.Name')])
+cik_map <- unique(risk_data[c('CIK','Company.Name')])
 
 shinyServer(function(input, output, session) {
-  values <- reactiveValues(company = '0000005981')
+  values <- reactiveValues(company = '0000037996')
   # Fill in the spot we created for a plot
   observeEvent(input$go, {
     values$company <- input$cik
   })
   
-  dataset <- reactive({
-    data[data$CIK == values$company,]
+  risk_dataset <- reactive({
+    arrange(risk_data[risk_data$CIK == values$company,], Year)
+  })
+  
+  business_dataset <- reactive({
+    arrange(business_data[business_data$CIK == values$company,], Year)
   })
   
   # output$plot1 <- renderPlot({
@@ -98,13 +137,8 @@ shinyServer(function(input, output, session) {
   #     ) + scale_x_continuous(breaks = dataset()$Year)    
   # })
   
-  distance <- reactive({
-    #tf.frame = data.frame(Measure = 'TF-IDF', value = dataset()$`TF-IDF`, Year = dataset()$Year, stringsAsFactors=F)
-    #jac.frame = data.frame(Measure = 'Jaccard', value = dataset()$Jaccard, Year = dataset()$Year, stringsAsFactors=F)
-    #w2v.frame = data.frame(Measure = 'Word2Vec', value = dataset()$Word2Vec, Year = dataset()$Year, stringsAsFactors=F)
-    #distance = rbind(tf.frame, jac.frame)
-    #distance = rbind(distance, w2v.frame)
-    distance = dataset()[,c("Year","TF-IDF","Jaccard","Word2Vec")]
+  risk_distance <- reactive({
+    distance = risk_dataset()[,c("Year","TF-IDF","Jaccard","Word2Vec")]
     missing_years = setdiff(all_years, unique(distance$Year))
      for(year in missing_years) {
        new_row = c(year,0,0,0)
@@ -113,14 +147,17 @@ shinyServer(function(input, output, session) {
     arrange(distance, Year)
   })
   
-  # output$plot1 <- renderChart2({
-  #   plot1 <- nPlot(value ~ Year, group='Measure', data = distance(), type = 'multiBarChart', width=600)
-  #   plot1$chart(stacked=FALSE, showControls=FALSE, forceY = 1)
-  #   plot1$xAxis(tickValues=all_years)
-  #   plot1
-  # })
+  business_distance <- reactive({
+    distance = business_dataset()[,c("Year","TF-IDF","Jaccard","Word2Vec")]
+    missing_years = setdiff(all_years, unique(distance$Year))
+    for(year in missing_years) {
+      new_row = c(year,0,0,0)
+      distance = rbind(distance, new_row)
+    }
+    arrange(distance, Year)
+  })  
   
-  output$plot1 <- renderHighchart({
+  output$risk1 <- renderHighchart({
     plot1 <- highchart() %>% 
       hc_chart(type = "column") %>% 
       hc_yAxis(max = 1) %>%
@@ -130,30 +167,32 @@ shinyServer(function(input, output, session) {
       #   stacking = "normal",
       #   enableMouseTracking = FALSE)
       # ) %>% 
-      hc_xAxis(categories = distance()$Year) %>% 
-      hc_add_series(name="Jaccard", data=distance()$Jaccard) %>%
-      hc_add_series(name="TF-IDF", data=distance()$`TF-IDF`) %>%
-      hc_add_series(name="Word2Vec", data=distance()$Word2Vec)
+      hc_xAxis(categories = risk_distance()$Year) %>% 
+      hc_add_series(name="Jaccard", data=risk_distance()$Jaccard) %>%
+      hc_add_series(name="TF-IDF", data=risk_distance()$`TF-IDF`) %>%
+      hc_add_series(name="Word2Vec", data=risk_distance()$Word2Vec)
     plot1
   })
   
-  changes <- reactive({
-    # new.frame = data.frame(Measure = 'New Words', value = dataset()$`New Words`, Year = dataset()$Year, stringsAsFactors=F)
-    # del.frame = data.frame(Measure = 'Deleted Words', value = dataset()$`Deleted Words`, Year = dataset()$Year, stringsAsFactors=F)
-    # com.frame = data.frame(Measure = 'Common Words', value = dataset()$`Common Words`, Year = dataset()$Year, stringsAsFactors=F)
-    # changes = rbind(new.frame, del.frame)
-    # changes = rbind(changes, com.frame)
-    # missing_years = setdiff(all_years, unique(changes$Year))
-    # for(year in missing_years) {
-    #   new_row <- c('New Words', 0, year)
-    #   changes <- rbind(changes, new_row)
-    #   del_row <- c('Deleted Words', 0, year)
-    #   changes <- rbind(changes, del_row)
-    #   com_row <- c('Common Words', 0, year)
-    #   changes <- rbind(changes, com_row)
-    # }
-    # arrange(changes, Year, Measure)
-    changes = dataset()[,c("Year","Common Words","New Words","Deleted Words")]
+  output$business1 <- renderHighchart({
+    plot1 <- highchart() %>% 
+      hc_chart(type = "column") %>% 
+      hc_yAxis(max = 1) %>%
+      #hc_yAxis(title = list(text = "Weights")) %>% 
+      # hc_plotOptions(column = list(
+      #   dataLabels = list(enabled = FALSE),
+      #   stacking = "normal",
+      #   enableMouseTracking = FALSE)
+      # ) %>% 
+      hc_xAxis(categories = business_distance()$Year) %>% 
+      hc_add_series(name="Jaccard", data=business_distance()$Jaccard) %>%
+      hc_add_series(name="TF-IDF", data=business_distance()$`TF-IDF`) %>%
+      hc_add_series(name="Word2Vec", data=business_distance()$Word2Vec)
+    plot1
+  })  
+  
+  risk_changes <- reactive({
+    changes = risk_dataset()[,c("Year","Common Words","New Words","Deleted Words")]
     missing_years = setdiff(all_years, unique(changes$Year))
     for(year in missing_years) {
       new_row = c(year,0,0,0)
@@ -162,40 +201,84 @@ shinyServer(function(input, output, session) {
     arrange(changes, Year)
   })
   
-  output$plot2 <- renderHighchart({
+  business_changes <- reactive({
+    changes = business_dataset()[,c("Year","Common Words","New Words","Deleted Words")]
+    missing_years = setdiff(all_years, unique(changes$Year))
+    for(year in missing_years) {
+      new_row = c(year,0,0,0)
+      changes = rbind(changes, new_row)
+    }
+    arrange(changes, Year)
+  })  
+  
+  output$risk2 <- renderHighchart({
     plot2 <- highchart() %>% 
       hc_chart(type = "column") %>% 
       #hc_yAxis(title = list(text = "Weights")) %>% 
       hc_plotOptions(column = list(stacking = "normal")) %>%
-      hc_xAxis(categories = changes()$Year) %>% 
+      hc_xAxis(categories = risk_changes()$Year) %>% 
       hc_yAxis(max = 1) %>%
-      hc_add_series(name="Deleted Words", data=changes()$`Deleted Words`, color='#444349') %>%
-      hc_add_series(name="New Words", data=changes()$`New Words`, color='#A4EA8A') %>%
-      hc_add_series(name="Common Words", data=changes()$`Common Words`, color='#86B4E6')
+      hc_add_series(name="Deleted Words", data=risk_changes()$`Deleted Words`, color='#444349') %>%
+      hc_add_series(name="New Words", data=risk_changes()$`New Words`, color='#A4EA8A') %>%
+      hc_add_series(name="Common Words", data=risk_changes()$`Common Words`, color='#86B4E6')
     plot2
   })
   
-  output$heatmap <- renderHighchart({
+  output$business2 <- renderHighchart({
+    plot2 <- highchart() %>% 
+      hc_chart(type = "column") %>% 
+      #hc_yAxis(title = list(text = "Weights")) %>% 
+      hc_plotOptions(column = list(stacking = "normal")) %>%
+      hc_xAxis(categories = business_changes()$Year) %>% 
+      hc_yAxis(max = 1) %>%
+      hc_add_series(name="Deleted Words", data=business_changes()$`Deleted Words`, color='#444349') %>%
+      hc_add_series(name="New Words", data=business_changes()$`New Words`, color='#A4EA8A') %>%
+      hc_add_series(name="Common Words", data=business_changes()$`Common Words`, color='#86B4E6')
+    plot2
+  })  
+  
+  output$heatmap_risk <- renderHighchart({
     heatmap <- highchart() %>%
       hc_chart(type = "heatmap")
       #hc_title(text = "Simulated values by years and months") %>%
       #hc_xAxis(categories = data$Company.Name) %>%
-    if(input$map.type == 'Jaccard') {
+    if(input$heat.type == 'Jaccard') {
       heatmap <- heatmap %>%
-        hc_add_series(name = "Jaccard", data = list_parse2(filled_data[,c('Year','Id','Jaccard')]))
-    } else if(input$map.type == 'TF-IDF') {
+        hc_add_series(name = "Jaccard", data = list_parse2(filled_risk[,c('Year','Id','Jaccard')]))
+    } else if(input$heat.type == 'TF-IDF') {
       heatmap <- heatmap %>%
-        hc_add_series(name = "TF-IDF", data = list_parse2(filled_data[,c('Year','Id','TF-IDF')]))
-    } else if (input$map.type == 'Word2Vec') {
+        hc_add_series(name = "TF-IDF", data = list_parse2(filled_risk[,c('Year','Id','TF-IDF')]))
+    } else if (input$heat.type == 'Word2Vec') {
       heatmap <- heatmap %>%
-        hc_add_series(name = "Word2Vec", data = list_parse2(filled_data[,c('Year','Id','Word2Vec')]))
+        hc_add_series(name = "Word2Vec", data = list_parse2(filled_risk[,c('Year','Id','Word2Vec')]))
     }
     heatmap <- heatmap %>%
-      hc_yAxis(categories = c('CIK', names(mapping))) %>%
+      hc_yAxis(categories = c('', names(mapping_risk))) %>%
+      hc_colorAxis(minColor = "#ffd3b6", maxColor = "#ff8b94")
+    heatmap
+  })
+  
+  output$heatmap_business <- renderHighchart({
+    heatmap <- highchart() %>%
+      hc_chart(type = "heatmap")
+    #hc_title(text = "Simulated values by years and months") %>%
+    #hc_xAxis(categories = data$Company.Name) %>%
+    if(input$heat.type == 'Jaccard') {
+      heatmap <- heatmap %>%
+        hc_add_series(name = "Jaccard", data = list_parse2(filled_business[,c('Year','Id','Jaccard')]))
+    } else if(input$heat.type == 'TF-IDF') {
+      heatmap <- heatmap %>%
+        hc_add_series(name = "TF-IDF", data = list_parse2(filled_business[,c('Year','Id','TF-IDF')]))
+    } else if (input$heat.type == 'Word2Vec') {
+      heatmap <- heatmap %>%
+        hc_add_series(name = "Word2Vec", data = list_parse2(filled_business[,c('Year','Id','Word2Vec')]))
+    }
+    heatmap <- heatmap %>%
+      hc_yAxis(categories = c('', names(mapping_business))) %>%
       hc_colorAxis(minColor = "#ffd3b6", maxColor = "#ff8b94")
     
     heatmap
-  })
+  })  
   
   
   #output$heatmap2 <- renderHighchart({
@@ -246,19 +329,23 @@ shinyServer(function(input, output, session) {
   #})
   
   output$tab1 <- DT::renderDataTable(
-    DT::datatable(dataset()[,c('CIK', 'Year','Jaccard', 'TF-IDF', 'Deleted Words','New Words', 'Top Words')])
+    DT::datatable(risk_dataset()[,c('CIK', 'Year','Jaccard', 'TF-IDF', 'Word2Vec','Total Words','Deleted Words','New Words', 'Top Words')])
   )
 
   output$tab2 <- DT::renderDataTable(
-    DT::datatable(data[,c('CIK', 'Year','Jaccard', 'TF-IDF', 'Deleted Words','New Words', 'Top Words')])
+    DT::datatable(business_dataset()[,c('CIK', 'Year','Jaccard', 'TF-IDF', 'Word2Vec','Total Words','Deleted Words','New Words', 'Top Words')])
   )
   
   output$tab3 <- DT::renderDataTable(
     DT::datatable(cik_map)
   )
   
-  output$tit <- renderText(
-    dataset()[dataset()$CIK == values$company, 'Company.Name'][1]
+  output$tit1 <- renderText(
+    risk_dataset()[risk_dataset()$CIK == values$company, 'Company.Name'][1]
+  )
+  
+  output$tit2 <- renderText(
+    business_dataset()[business_dataset()$CIK == values$company, 'Company.Name'][1]
   )
   
   ## Send plots to UI.
