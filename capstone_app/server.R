@@ -1,6 +1,7 @@
 library(shiny)
 library(dplyr)
 library(tidyr)
+library(stringr)
 library(highcharter)
 
 #setwd('/home/hs2865/src/f16-GS/capstone_app')
@@ -17,7 +18,7 @@ business_data <- read.csv("business_data.csv")
 
 ## Clean and format risk.
 risk_data <- unique(risk_data)
-colnames(risk_data) <- c('CIK', 'Jaccard', 'TF-IDF', 'Word2Vec', 'Common Words', 'Deleted Words','New Words', 'Total Words', 'Top Words', 'Year')
+colnames(risk_data) <- c('CIK', 'Jaccard', 'TF-IDF', 'Word2Vec', 'Common.Words', 'Deleted.Words','New.Words', 'Total.Words', 'Top.Words', 'Year')
 risk_data[,c(2:7)] = round(risk_data[,c(2:7)],2)
 risk_data$CIK <- sprintf('%010d', risk_data$CIK)
 
@@ -25,7 +26,7 @@ risk_data <- merge(x = risk_data, y = companies[,c('CIK', 'Company.Name')], by =
 
 ## Clean and format business.
 business_data <- unique(business_data)
-colnames(business_data) <- c('CIK', 'Jaccard', 'TF-IDF', 'Word2Vec', 'Common Words', 'Deleted Words','New Words', 'Total Words', 'Top Words', 'Year')
+colnames(business_data) <- c('CIK', 'Jaccard', 'TF-IDF', 'Word2Vec', 'Common.Words', 'Deleted.Words','New.Words', 'Total.Words', 'Top.Words', 'Year')
 business_data[,c(2:7)] = round(business_data[,c(2:7)],2)
 business_data$CIK <- sprintf('%010d', business_data$CIK)
 
@@ -100,8 +101,14 @@ business_data$Id <- mapping_business[business_data$Company.Name]
 ## Get list of all companies and CIKs.
 cik_map <- unique(risk_data[c('CIK','Company.Name')])
 
+## Word Analytics.
+#risk_data %>%
+#  select(Top.Words) %>%
+#  separate(Top.Words, as.character(seq(10)), sep = ",")
+#  group_by(CIK)
+
 shinyServer(function(input, output, session) {
-  values <- reactiveValues(company = '0000037996')
+  values <- reactiveValues(company = '0001050446')
   # Fill in the spot we created for a plot
   observeEvent(input$go, {
     values$company <- input$cik
@@ -192,7 +199,7 @@ shinyServer(function(input, output, session) {
   })  
   
   risk_changes <- reactive({
-    changes = risk_dataset()[,c("Year","Common Words","New Words","Deleted Words")]
+    changes = risk_dataset()[,c("Year","Common.Words","New.Words","Deleted.Words")]
     missing_years = setdiff(all_years, unique(changes$Year))
     for(year in missing_years) {
       new_row = c(year,0,0,0)
@@ -202,7 +209,7 @@ shinyServer(function(input, output, session) {
   })
   
   business_changes <- reactive({
-    changes = business_dataset()[,c("Year","Common Words","New Words","Deleted Words")]
+    changes = business_dataset()[,c("Year","Common.Words","New.Words","Deleted.Words")]
     missing_years = setdiff(all_years, unique(changes$Year))
     for(year in missing_years) {
       new_row = c(year,0,0,0)
@@ -218,9 +225,9 @@ shinyServer(function(input, output, session) {
       hc_plotOptions(column = list(stacking = "normal")) %>%
       hc_xAxis(categories = risk_changes()$Year) %>% 
       hc_yAxis(max = 1) %>%
-      hc_add_series(name="Deleted Words", data=risk_changes()$`Deleted Words`, color='#444349') %>%
-      hc_add_series(name="New Words", data=risk_changes()$`New Words`, color='#A4EA8A') %>%
-      hc_add_series(name="Common Words", data=risk_changes()$`Common Words`, color='#86B4E6')
+      hc_add_series(name="Deleted.Words", data=risk_changes()$`Deleted.Words`, color='#444349') %>%
+      hc_add_series(name="New.Words", data=risk_changes()$`New.Words`, color='#A4EA8A') %>%
+      hc_add_series(name="Common.Words", data=risk_changes()$`Common.Words`, color='#86B4E6')
     plot2
   })
   
@@ -231,9 +238,9 @@ shinyServer(function(input, output, session) {
       hc_plotOptions(column = list(stacking = "normal")) %>%
       hc_xAxis(categories = business_changes()$Year) %>% 
       hc_yAxis(max = 1) %>%
-      hc_add_series(name="Deleted Words", data=business_changes()$`Deleted Words`, color='#444349') %>%
-      hc_add_series(name="New Words", data=business_changes()$`New Words`, color='#A4EA8A') %>%
-      hc_add_series(name="Common Words", data=business_changes()$`Common Words`, color='#86B4E6')
+      hc_add_series(name="Deleted.Words", data=business_changes()$`Deleted.Words`, color='#444349') %>%
+      hc_add_series(name="New.Words", data=business_changes()$`New.Words`, color='#A4EA8A') %>%
+      hc_add_series(name="Common.Words", data=business_changes()$`Common.Words`, color='#86B4E6')
     plot2
   })  
   
@@ -329,15 +336,17 @@ shinyServer(function(input, output, session) {
   #})
   
   output$tab1 <- DT::renderDataTable(
-    DT::datatable(risk_dataset()[,c('CIK', 'Year','Jaccard', 'TF-IDF', 'Word2Vec','Total Words','Deleted Words','New Words', 'Top Words')])
+    DT::datatable(risk_dataset()[,c('CIK', 'Year','Jaccard', 'TF-IDF', 'Word2Vec','Total.Words','Deleted.Words','New.Words', 'Top.Words')],
+                  rownames = F, options = list(bFilter=0))
   )
 
   output$tab2 <- DT::renderDataTable(
-    DT::datatable(business_dataset()[,c('CIK', 'Year','Jaccard', 'TF-IDF', 'Word2Vec','Total Words','Deleted Words','New Words', 'Top Words')])
+    DT::datatable(business_dataset()[,c('CIK', 'Year','Jaccard', 'TF-IDF', 'Word2Vec','Total.Words','Deleted.Words','New.Words', 'Top.Words')],
+                  rownames = F, options = list(bFilter=0, bLengthChange=0))
   )
   
   output$tab3 <- DT::renderDataTable(
-    DT::datatable(cik_map)
+    DT::datatable(cik_map, rownames = F)
   )
   
   output$tit1 <- renderText(

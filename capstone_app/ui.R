@@ -20,10 +20,11 @@ dashboardPage(
       menuItem("Overview", tabName = "overview", icon = icon("book")),
       menuItem("Risk Analysis", tabName = "risk", icon = icon("bar-chart")),
       menuItem("Business Analysis", tabName = "business", icon = icon("bar-chart")),
-      menuItem("Heatmap", tabName = "heatmap", icon = icon("table"))
+      menuItem("Heatmap", tabName = "heatmap", icon = icon("table")),
+      menuItem("Written Report", icon = icon(" fa-file-text-o"), href = "https://github.com/masta-g3/documents/blob/master/FinalCapstoneReport.pdf")
     ),
     ## Filtering items.
-    textInput('cik', "Enter CIK", '0000037996'),
+    textInput('cik', "Enter CIK", '0001050446'),
     actionButton('go', 'Go!')
   ),
   
@@ -54,13 +55,22 @@ dashboardPage(
                          on them. The tabs to the left allow the users to explore the data on a company-by-company basis, or to get a general
                          overview of changes on all companies within the portfolio via a heatmap representation. The tool focuses on 2 specific sections
                          from the 10-Ks: 'Risk' and 'Business', given that these are the most relevant to evaluate a company's strategic situation."),
-                      p(' .')
-                     ),
+                      h4(strong('Sample Portfolio'))
+                     )
+              ),
                 fluidRow(
-                  column(6,
+                  column(5,
                        DT::dataTableOutput('tab3')
+                       ),
+                  column(6
                        )
-                )
+                  ),
+                  fluidRow(
+                    column(11,
+                           p(strong('Capstone Report 2016')),
+                           p('Sponsor: Goldman Sachs'),
+                           p('Juan Martin Borgnino, Manuel Rueda, Hiroaki Suzuki, Shenghan Yu, Xuyan Xiao')
+                       )
                 )
               ),
       tabItem(tabName = "risk",
@@ -74,8 +84,8 @@ dashboardPage(
                          highchartOutput("risk1",height = "400px"),
                          #plotOutput("plot1"),
                          h4('The graph above shows the Jaccard distance and the cosine distance computed
-                            using the TF-IDF features of each document. Word2Vec cosine distance is also 
-                            included to capture semantic changes.')
+                            using the TF-IDF features of each document, representing lexical similarity.
+                            Word2Vec cosine distance is also included to capture semantic changes.')
                          
                   ),
                   column(6,
@@ -107,8 +117,8 @@ dashboardPage(
                        highchartOutput("business1",height = "400px"),
                        #plotOutput("plot1"),
                        h4('The graph above shows the Jaccard distance and the cosine distance computed
-                          using the TF-IDF features of each document. We are basically trying to
-                          capture the lexical changes between documents.')
+                          using the TF-IDF features of each document, representing lexical similarity.
+                          Word2Vec cosine distance is also included to capture semantic changes.')
                        
                        ),
                 column(6,
